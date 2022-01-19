@@ -24,4 +24,4 @@ git log #
 
 git log --oneline # git log를 한줄로 표현
 
-git push origin master # https://~.git으로 파일 올리기 완료!con
+git push origin master # https://~.git으로 파일 올리기 완료!
