@@ -1,4 +1,6 @@
-### edu.ssafy.git에 homework올리기
+## git push 하기
+
+
 
 git init
 
@@ -6,7 +8,7 @@ git config --local user.name '최지은'
 
 git config --local user.email 'zzieun_choi@naver.com'
 
-git remote add origin https://lab.ssafy.com/zzieun_choi/daily_practice_1_3.git
+git remote add origin <원하는 사이트 주소>
 
 git remote
 
@@ -16,12 +18,22 @@ git remote -v
 
 git add README.md
 
-git status # 
+git status 
+
+git add
 
 git commit -m 'message이름 적기'
 
-git log # 
+git log
 
 git log --oneline # git log를 한줄로 표현
 
 git push origin master # https://~.git으로 파일 올리기 완료!
+
+
+
+## git pull 하기
+
+git remote -v 
+
+git pull origin master
