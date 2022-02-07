@@ -95,6 +95,7 @@ flexbox가 나오면서 실질적으로 어떠한 내부 영역안에서의 배�
 * 축
   * 메인축: 메인축을 기점으로 배치하므로 1차원이라 함
   * 교차축
+  
 * 구성요소
   * 부모요소(flex container): flex item들이 놓여있는 영역
   * 자식요소(flex item): 컨테이너에 속해있는 컨텐츠
@@ -102,12 +103,14 @@ flexbox가 나오면서 실질적으로 어떠한 내부 영역안에서의 배�
 * flex-direction(main axis 기준 방향 설정)
 
   - row:  가로가 main축, 세로가 cross 축 -> 가로를 기점으로 배치
+  
+  ![flex-direction](220207-float,flex.assets/flex-direction.png)
 
 
   - row-reverse: 가로가 main 축이지만 오른쪽에서 왼쪽으로
 
-  - column: 세로가 main축 -> 수직으로 배치
 
+  - column: 세로가 main축 -> 수직으로 배치
   - column-reverse: 세로가 main 축이지만 아래쪽에서 위쪽으로 배치
 
 * flex-속성
@@ -115,28 +118,39 @@ flexbox가 나오면서 실질적으로 어떠한 내부 영역안에서의 배�
   * 배치 설정
 
     * flex-direction
-
     * flex-wrap: 아이템이 컨테이너를 벗어나는 경우 해당 영역 내에 배치되도록
-
+  
       * wrap: 넘치면 그 다음줄로 배치
       * nowrap(기본값): 한줄에 배치
-
+  
+    ![flex-wrap](220207-float,flex.assets/flex-wrap.png)
+  
     * flex-flow: direction과 wrap 합친거의 shorthand
-
+  
        ex) flex-flow : row nowrap;
-
+  
   * 공간 나누기
-
+  
     * justify-content(main axis): main axis를 기준으로 공간 배분
       * flex-start, flex-end, center, space-between, space-around, space-evenly
+  
+    ![justify-content](220207-float,flex.assets/justify-content.png)
+  
     * align-content(cross axis): cross axis를 기준으로 공간 배분
       * flex-start, flex-end, center, space-between, space-around, space-evenly
-
+  
+    ![align-content](220207-float,flex.assets/align-content.png)
+  
   * 정렬
-
+  
     * align-items(모든 아이템을 cross axis기준으로): 모든 아이탬들을 cross axis를 기준정렬
+    
+    ![align-items](220207-float,flex.assets/align-items.png)
+    
     * align-self(개별 아이템):개별 아이탬들을 cross axis를 기준정렬
-
+  
+  ![align-self](220207-float,flex.assets/align-self.png)
+  
   ``` css
   .container{
       display: flex;
@@ -144,9 +158,9 @@ flexbox가 나오면서 실질적으로 어떠한 내부 영역안에서의 배�
       align-items : center;
   } /*를 하면 수직 수평 딱 가운데에 쉽게 정렬 가능 */
   ```
-
   
-
+  
+  
   * 기타 속성
     * flex-grow: 남은 영역을 아이템에 분배
     * order: 배치순서
