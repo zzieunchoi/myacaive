@@ -106,6 +106,16 @@ flexbox가 나오면서 실질적으로 어떠한 내부 영역안에서의 배�
   
   ![flex-direction](220207-float,flex.assets/flex-direction.png)
 
+``` html
+<div class= "d-flex flex-row mb-3">
+    <div class = "p-2">item1</div>
+    <div class = "p-2">item2</div>
+    <div class = "p-2">item3</div>
+</div>
+```
+
+
+
 
   - row-reverse: 가로가 main 축이지만 오른쪽에서 왼쪽으로
 
@@ -136,6 +146,16 @@ flexbox가 나오면서 실질적으로 어떠한 내부 영역안에서의 배�
   
     ![justify-content](220207-float,flex.assets/justify-content.png)
   
+    ```html
+    <div class = "d-flex justify-content-start">
+      <div class="p-2 bd-highlight">Flex item 1</div>
+      <div class="p-2 bd-highlight">Flex item 2</div>
+      <div class="p-2 bd-highlight">Flex item 3</div>
+    </div>
+    ```
+  
+    
+  
     * align-content(cross axis): cross axis를 기준으로 공간 배분
       * flex-start, flex-end, center, space-between, space-around, space-evenly
   
@@ -147,16 +167,45 @@ flexbox가 나오면서 실질적으로 어떠한 내부 영역안에서의 배�
     
     ![align-items](220207-float,flex.assets/align-items.png)
     
+    ```html
+    <div class="d-flex align-items-start">...</div>
+    <div class="d-flex align-items-end">...</div>
+    <div class="d-flex align-items-center">...</div>
+    <div class="d-flex align-items-baseline">...</div>
+    <div class="d-flex align-items-stretch">...</div>
+    ```
+    
+    
+    
     * align-self(개별 아이템):개별 아이탬들을 cross axis를 기준정렬
   
   ![align-self](220207-float,flex.assets/align-self.png)
   
   ``` css
+  <div class="align-self-start">Aligned flex item</div>
+  <div class="align-self-end">Aligned flex item</div>
+  <div class="align-self-center">Aligned flex item</div>
+  <div class="align-self-baseline">Aligned flex item</div>
+  <div class="align-self-stretch">Aligned flex item</div>
+  
   .container{
       display: flex;
       justify-content: center;
       align-items : center;
   } /*를 하면 수직 수평 딱 가운데에 쉽게 정렬 가능 */
+  ```
+  
+  
+  
+  * 채우기: flex-fill을 사용하면 안에 들어있는 content만큼 너비 배분
+  
+  ```html
+  <div class="d-flex bd-highlight">
+    <div class="p-2 flex-fill bd-highlight">Flex item with a lot of content</div>
+    <div class="p-2 flex-fill bd-highlight">Flex item</div>
+    <div class="p-2 flex-fill bd-highlight">Flex item</div>
+  </div>
+  <!--안에 들어있는 내용 만큼 컨테이너 길이가 길어짐 -->
   ```
   
   
@@ -177,3 +226,27 @@ flexbox가 나오면서 실질적으로 어떠한 내부 영역안에서의 배�
    따라서, 2 -> 3 -> 4 -> 1 순서로 나오게됨
 
 2. grow: 남은영역을 1, 2에 배치하게 되는데 각각 1을 갖고 있으므로 남은 영역을 1:1로 분배하도록 하는 것이기 때문에 2와 1은 같은 넓이를 갖게 됨
+
+
+
+* auto margin
+
+  * me-auto: 나 빼고 나머지 것들은 끝으로 다 밀어버려줘
+  * ms-auto: 나빼고 나머지 것들은 앞으로 다 밀어버려줘
+
+  ```html
+  <div class="d-flex bd-highlight mb-3">
+    <div class="me-auto p-2 bd-highlight">Flex item</div>
+    <div class="p-2 bd-highlight">Flex item</div>
+    <div class="p-2 bd-highlight">Flex item</div>
+  </div>
+  
+  <div class="d-flex bd-highlight mb-3">
+    <div class="p-2 bd-highlight">Flex item</div>
+    <div class="p-2 bd-highlight">Flex item</div>
+    <div class="ms-auto p-2 bd-highlight">Flex item</div>
+  </div>
+  ```
+
+  
+
