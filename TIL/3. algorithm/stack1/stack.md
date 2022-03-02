@@ -286,6 +286,18 @@ visited[E] <- True .....
 
 
 
+``` python
+def dfs(v):
+    visited[v] = 1
+    for i in graph[v]:
+        if visited[i] == 0:
+            dfs(i)
+```
+
+
+
+
+
 * 계산기
 
 : 문자열로 된 계산식이 주어질 때, 스택을 이용하여 이 계산식의 값을 계산할 수 있다!
