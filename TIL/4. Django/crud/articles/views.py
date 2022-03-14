@@ -4,6 +4,10 @@ from .models import Article
 # Create your views here.
 def index(request):
     articles = Article.objects.all()
+    # 역순으로 보는 방법
+    #articles = Article.objects.all()[::-1]
+    #articles = Article.objects.order_by('-pk')
+
     context = {
         'articles': articles,
     }
@@ -29,4 +33,36 @@ def create(request):
     
     #세번째 방법
     # Article.objects.create(title= title, content= content)
-    return render(request, 'articles/create.html')
+    return redirect('articles:index')
+
+def detail_01(request, pk):
+    articles = Article.objects.get(pk=pk)
+    # 역순으로 보는 방법
+    #articles = Article.objects.all()[::-1]
+    #articles = Article.objects.order_by('-pk')
+
+    context = {
+        'articles': articles,
+    }
+    return render(request, 'articles/detail.html',context)
+
+
+def detail_02(request, title):
+    articles = Article.objects.filter(title = title)
+    # 역순으로 보는 방법
+    #articles = Article.objects.all()[::-1]
+    #articles = Article.objects.order_by('-pk')
+
+    context = {
+        'articles': articles,
+    }
+    return render(request, 'articles/detail.html',context)
+
+
+def delete(request, pk):
+    article = Article.objects.get(pk=pk)
+    if request.method == "POST":
+        article.delete()
+        return redirect('articles:index')
+    else:
+        return redirect('articles:detail', article.title)
