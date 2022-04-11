@@ -84,6 +84,7 @@ TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원�
    작성 방법
    웹을 더 아름답게 만들어주는 bootstrap 활용 등
    웹 구현 환경을 동일하게 만들어주는 requirements.txt도 포함
+   로그인/ 로그아웃/ 회원가입/ 회원내용 변경
    ```
 
 7. `5_computational_thinking`
