@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods, require_POST, require_safe
 from .models import Article
-from .forms import ArticleForm
+from .forms import ArticleForm, CommentForm
 
 # Create your views here.
 @require_safe
@@ -65,3 +65,14 @@ def update(request, pk):
     }
     return render(request, 'articles/update.html', context)
 
+def detail(request,pk):
+    article = get_object_or_404(Article, pk= pk)
+    comment_form = CommentForm()
+    # 조회한 article의 모든 댓글을 조회
+    comments = article.comment_set.all()
+    context = {
+        'article': article,
+        'comment_form': comment_form,
+        'comments':comments,
+    }
+    return render(request, 'articles/detail.html', context)
