@@ -98,3 +98,26 @@ TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원�
    ```
 
    
+
+## project
+
+### project 01
+
+python을 활용한 데이터 수집 1
+
+```
+dictionary 구조를 사용하는 방법
+for문 돌려서 모든 dictionary 파일 돌려보기
+원하는 데이터만 가져올 수 있도록 데이터 수정하기
+open('.json', encoding = )으로 json 파일 가져오기
+```
+
+
+
+### project 02
+
+python을 활용한 데이터 수집 2
+
+```
+```
+
