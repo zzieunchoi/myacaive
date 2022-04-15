@@ -25,13 +25,19 @@
 
 TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원에서 정리한 것!
 
-1. `.ipynb_checkpoints`
-
-   주피터 노트북에서 필요한 자료들 옮겨놓은 것!
-
-2. `0_atfirst`
+1. `0_git`
 
    git을 사용하는 방식, 어떻게 커밋하고 끄는지에 관한 기초적인 방법
+
+   ```
+   git의 사용 방법
+   git init , add , commit
+   git branch, branch merging
+   git 되돌리기
+   git reset, revert
+   ```
+
+   
 
 3. `1_python`
 
