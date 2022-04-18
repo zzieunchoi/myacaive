@@ -35,7 +35,7 @@ urlpatterns = [
 <!--pjt07/templates/base.html-->
 <body>
   <div class = "mx-5">
-  <div class="container">
+    <div class="container">
     {% if request.user.is_authenticated %} <!-- 로그인한 경우-->
       <nav class="navbar fixed-top navbar-light bg-light">
         <div class="container-fluid">
@@ -53,32 +53,30 @@ urlpatterns = [
             {% csrf_token %}
             <input class = 'btn btn-danger btn-sm' type="submit" value="Withdrawal">
           </form>
-        </div>
+          </div>
           <br> 
         </div>
       </nav>
 
     {% else %} <!-- 비로그인인 경우-->
-    <nav class="navbar sticky-top navbar-light bg-light">
-      <div class="container-fluid">
-        <h3>★ Before using our site, please LOGIN or SIGNUP ★</h3>
-        <br>
-        <div class="d-flex justify-content-end">
-        <a class = 'btn btn-outline-success btn-sm' href="{% url 'accounts:login' %}">Login</a>
-        <br>
-        <a class = 'btn btn-outline-danger btn-sm' href="{% url 'accounts:signup' %}">Signup</a>
+      <nav class="navbar sticky-top navbar-light bg-light">
+        <div class="container-fluid">
+          <h3>★ Before using our site, please LOGIN or SIGNUP ★</h3>
+          <br>
+          <div class="d-flex justify-content-end">
+          <a class = 'btn btn-outline-success btn-sm' href="{% url 'accounts:login' %}">Login</a>
+          <br>
+          <a class = 'btn btn-outline-danger btn-sm' href="{% url 'accounts:signup' %}">Signup</a>
+          </div>
         </div>
-      </div>
-    </nav>
-
+      </nav>
     {% endif %}
-
-  </div>
   
   {% block content %}
-  
+        
   {% endblock content %}
-</div>
+    </div>
+  </div>
 </body>
 ```
 
@@ -90,7 +88,7 @@ urlpatterns = [
 # models.py
 from django.db import models
 from django.conf import settings
-# Create your models here.
+
 class Movie(models.Model):
     title = models.CharField(max_length = 20)
     description = models.TextField()
@@ -163,6 +161,7 @@ from django.urls import path
 from . import views
 
 app_name = 'movies'
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('create/', views.create, name='create'),
@@ -172,7 +171,6 @@ urlpatterns = [
     path('<int:pk>/comments/', views.comments_create, name='comments_create'),
     path('<int:movie_pk>/comments/<int:comment_pk>/delete/', views.comments_delete, name='comments_delete'),
 ]
-
 ```
 
 ```python
@@ -180,10 +178,8 @@ urlpatterns = [
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods, require_POST, require_safe
-from .models import Movie
-from .models import Comment
-from .forms import MovieForm
-from .forms import CommentForm
+from .models import Movie, Comment
+from .forms import MovieForm, CommentForm
 
 @require_safe
 def index(request):
@@ -192,7 +188,6 @@ def index(request):
         'movies': movies,
     }
     return render(request, 'movies/index.html', context)
-
 
 @login_required
 @require_http_methods(["GET", "POST"])
@@ -280,14 +275,11 @@ def comments_delete(request, movie_pk ,comment_pk):
   {% else %}
     <p>If you want to create movie's detail, you should login our site!</p>
   {% endif %}
-
   <hr>
-  
   {% for movie in movies %}
   <a href="{% url 'movies:detail' movie.pk %}">{{ movie.title }}</a>
   <hr>
   {% endfor %}
-
 {% endblock content %}
 ```
 
@@ -297,50 +289,42 @@ def comments_delete(request, movie_pk ,comment_pk):
 
 {% block content %}
 {% if request.user.is_authenticated %}
-
-<h1>DETAIL</h1>
-<hr>
-
-<p class="fw-bold">제목 : {{ movie.title }}</p>
-<p>{{ movie.description }}</p>
-<hr>
-<p>If you have better information, please edit our movie's description</p> 
-<a class="btn btn-outline-dark btn-sm" href="{% url 'movies:update' movie.pk %}">UPDATE</a>
-
-<form action="{% url 'movies:delete' movie.pk %}" method="POST">
-  {% csrf_token %}
-  <input class="btn btn-outline-danger btn-sm" type="submit" value="DELETE">
-</form>
-
-<a class="btn btn-outline-dark btn-sm" href="{% url 'movies:index' %}">back to INDEX</a>
-<hr>
-
-<p class="fw-bold">{{ movie.title }}'s review</p>
-<ul>
-  {% for comment in comments %}
-    <li>{{ comment.content }}
-      <form action = "{% url 'movies:comments_delete' movie.pk comment.pk %}" method = "POST">
-        {% csrf_token %}
+  <h1>DETAIL</h1>
+  <hr>
+  <p class="fw-bold">제목 : {{ movie.title }}</p>
+  <p>{{ movie.description }}</p>
+  <hr>
+  <p>If you have better information, please edit our movie's description</p> 
+  <a class="btn btn-outline-dark btn-sm" href="{% url 'movies:update' movie.pk %}">UPDATE</a>
+  <form action="{% url 'movies:delete' movie.pk %}" method="POST">
+    {% csrf_token %}
+    <input class="btn btn-outline-danger btn-sm" type="submit" value="DELETE">
+  </form>
+  <a class="btn btn-outline-dark btn-sm" href="{% url 'movies:index' %}">back to INDEX</a>
+  <hr>
+  <p class="fw-bold">{{ movie.title }}'s review</p>
+  <ul>
+    {% for comment in comments %}
+      <li>{{ comment.content }}
+        <form action = "{% url 'movies:comments_delete' movie.pk comment.pk %}" method = "POST">
+          {% csrf_token %}
           <input class="btn btn-outline-danger btn-sm" type="submit" value = "delete">
-      </form>
-
-    </li>
-  {% endfor %}
-</ul>
-<hr>
-
-<form action = "{% url 'movies:comments_create' movie.pk %}" method = "POST">
-  {% csrf_token %}
-  {{ comment_form }}
-  <input class="btn btn-outline-dark btn-sm" type = "submit" value = "submit">
-</form>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+  <hr>
+  <form action = "{% url 'movies:comments_create' movie.pk %}" method = "POST">
+    {% csrf_token %}
+    {{ comment_form }}
+    <input class="btn btn-outline-dark btn-sm" type = "submit" value = "submit">
+  </form>
 
 {% else %}
   <p>If you want to see movie's datail, you should login our site!</p>
   <a class="btn btn-outline-dark btn-sm" href = "{% url 'accounts:login' %}">LOGIN</a>
 
 {% endif %}
-
 {% endblock content %}
 ```
 
@@ -369,9 +353,7 @@ def comments_delete(request, movie_pk ,comment_pk):
 {% extends 'base.html' %}
 
 {% block content %}
-
 <h1>UPDATE</h1>
-
 <hr>
 <form action="{% url 'movies:update' movie.pk %}" method="POST">
   {% csrf_token %}
@@ -380,7 +362,6 @@ def comments_delete(request, movie_pk ,comment_pk):
   <input class="btn btn-outline-dark btn-sm" type="submit" value = "submit">
 </form>
 <a class="btn btn-outline-dark btn-sm" href="{% url 'movies:index' %}">back to INDEX</a>
-
 {% endblock content %}
 ```
 
@@ -518,10 +499,8 @@ def change_password(request):
             form.save()
             update_session_auth_hash(request, form.user)
             return redirect('accounts:update')
-
     else:
         form = PasswordChangeForm(request.user)
-    
     context = {
         'form': form
     }
@@ -534,11 +513,11 @@ def change_password(request):
 
 {% block content %}
 <h1>LOGIN</h1>
-<form action="{% url 'accounts:login' %}" method = "POST">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input class="btn btn-outline-dark btn-sm" type="submit" value = "login">
-</form>
+  <form action="{% url 'accounts:login' %}" method = "POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-outline-dark btn-sm" type="submit" value = "login">
+  </form>
 
 {% endblock content %}
 ```
@@ -548,13 +527,13 @@ def change_password(request):
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>WELCOME, signup site</h1>
-<hr>
-<form action="{% url 'accounts:signup' %}" method="POST">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input class="btn btn-outline-dark btn-sm" type="submit">
-</form>
+  <h1>WELCOME, signup site</h1>
+  <hr>
+  <form action="{% url 'accounts:signup' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-outline-dark btn-sm" type="submit">
+  </form>
 
 {% endblock content %}
 ```
@@ -587,8 +566,6 @@ def change_password(request):
   {{ form.as_p }}
   <input class="btn btn-outline-dark btn-sm" type="submit">
 </form>
-
 <a class="btn btn-outline-dark btn-sm" href="{% url 'movies:index' %}">back</a>
-
 {% endblock content %}
 ```
