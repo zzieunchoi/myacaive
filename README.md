@@ -1,5 +1,7 @@
 # ♥ 개발자 지은이 화이팅 ♥
 
+할일만 제대로!! -지은-
+
 ## jupyter notebook
 
 * jupyter notebook 을 사용해 배운 알고리즘 실습하기!

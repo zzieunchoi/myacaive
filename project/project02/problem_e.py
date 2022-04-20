@@ -1,11 +1,35 @@
 import requests
 from pprint import pprint
-
+from tmdb import TMDB
 
 def credits(title):
-    pass 
-    # 여기에 코드를 작성합니다.  
+    path1 = '/search/movie'
+    r1 = TMDB(path1, title)
+    data1 = r1.make_data()
+    
+    if data1['results']== []:
+        return None
 
+    movie_id = data1['results'][0]['id']
+    path2 = '/movie/' + str(movie_id) +'/credits'
+    r2 = TMDB(path2)
+    data2 = r2.make_data()
+    
+    actor_list = [] 
+    for movie in data2['cast']: 
+        if movie['cast_id'] < 10: 
+            actor_list.append(movie['name']) 
+
+    director_list = [] 
+    for movie in data2['crew']: 
+        if movie['department'] == 'Directing': 
+            director_list.append(movie['name']) 
+
+    ans_dict = dict()
+    ans_dict['cast'] = actor_list
+    ans_dict['crew'] = director_list
+
+    return ans_dict
 
 if __name__ == '__main__':
     """

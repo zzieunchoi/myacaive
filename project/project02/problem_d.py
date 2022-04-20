@@ -1,10 +1,24 @@
 import requests
 from pprint import pprint
-
+from tmdb import TMDB
 
 def recommendation(title):
-    pass 
-    # 여기에 코드를 작성합니다.  
+    path = '/search/movie'
+    r1 = TMDB(path, title)
+    data1 = r1.make_data()
+    
+    if data1['results']== []:
+        return None
+    
+    movie_id = data1['results'][0]['id']
+    # f스트링도 쌉가능 /movie/{movie_id}/recommendations
+    path2 = '/movie/'+ str(movie_id) + '/recommendations'
+    r2 = TMDB(path2)
+    data2 = r2.make_data()
+    ans_list = []
+    for movie in data2['results']:
+        ans_list.append(movie['title'])
+    return ans_list
 
 
 if __name__ == '__main__':

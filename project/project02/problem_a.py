@@ -1,10 +1,12 @@
 import requests
-
+from tmdb import TMDB
 
 def popular_count():
-    pass 
-    # 여기에 코드를 작성합니다.  
-
+    path= '/movie/popular'
+    r = TMDB(path)
+    data = r.make_data()
+    ans = len(data.get('results'))
+    return ans
 
 if __name__ == '__main__':
     """

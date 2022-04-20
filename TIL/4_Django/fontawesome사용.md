@@ -27,3 +27,20 @@
 <input type ="submit" class = "search" value = "아이콘_해당_유니코드_입력;"></input>
 ```
 
+
+
+3. button 안에 아이콘 넣기
+
+```html
+<div>
+<form action="{% url 'articles:likes' article.pk %}" method="POST">
+  {% csrf_token %}
+  {% if user in article.like_users.all %}
+    <button class="btn btn-transparent"><i class="fa fa-heart" style="color:red"></i></button>
+  {% else %}
+    <button class="btn btn-transparent"><i class="fa fa-heart" style="color:black"></i></button>
+  {% endif %}
+</form>
+</div>
+```
+

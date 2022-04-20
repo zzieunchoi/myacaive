@@ -1,11 +1,23 @@
 import requests
 from pprint import pprint
-
+from tmdb import TMDB
 
 def ranking():
-    pass 
-    # 여기에 코드를 작성합니다.  
+    path = '/movie/popular'
+    r = TMDB(path)
+    data = r.make_data()
 
+    movie_dict = dict()
+    for movie in data.get('results'):
+        movie_dict[movie['title']]= movie['vote_average']
+
+    sorted_dict = sorted(movie_dict.items(), key = lambda item: item[1], reverse =True)
+    print(sorted_dict)
+    ans_list = []
+    for i in range(5):
+        ans_list.append(sorted_dict[i][0])
+
+    return ans_list
 
 if __name__ == '__main__':
     """

@@ -1,10 +1,17 @@
 import requests
 from pprint import pprint
-
+from tmdb import TMDB
 
 def vote_average_movies():
-    pass 
-    # 여기에 코드를 작성합니다.  
+    path = '/movie/popular'
+    r = TMDB(path)
+    data = r.make_data()
+    list = []
+    # for i in range(len(data.get('results'))):
+    for movie in data.get('results'):
+        if movie['vote_average']>=8:
+            list.append(movie['title'])
+    return list
 
 if __name__ == '__main__':
     """
