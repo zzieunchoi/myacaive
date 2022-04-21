@@ -82,7 +82,7 @@ TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원�
    그래프의 기본과 탐색, 그래프의 최소비용 문제
    ```
 
-6. `4_django`
+5. `4_django`
 
    웹 기본 지식을 이용하여 장고로 웹 구현
 
@@ -94,6 +94,7 @@ TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원�
    웹 구현 환경을 동일하게 만들어주는 requirements.txt도 포함
    로그인/ 로그아웃/ 회원가입/ 회원내용 변경
    DB - MODEL RELATIONSHIP
+   REST API
    ```
 
 7. `5_computational_thinking`
