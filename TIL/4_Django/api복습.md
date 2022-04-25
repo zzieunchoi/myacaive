@@ -14,7 +14,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
 ]
-ROOT_URLCONF = 'my_api.urls'
 ```
 
 ```python
@@ -56,6 +55,8 @@ class Comment(models.Model):
 from rest_framework import serializers
 from .models import Article, Comment
 
+# 전체적인 인덱스 조회 -> ArticleListSerializer
+# 세부적인 디테이 조회 -> ArticleSerializer
 
 class ArticleListSerializer(serializers.ModelSerializer):
 
@@ -74,9 +75,9 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class ArticleSerializer(serializers.ModelSerializer):
     # comment_set = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    # comment_set = CommentSerializer(many=True, read_only=True)
+    comment_set = CommentSerializer(many=True, read_only=True)
+    
     comment_count = serializers.IntegerField(source='comment_set.count', read_only=True)
-
     class Meta:
         model = Article
         fields = '__all__'
@@ -104,7 +105,6 @@ from rest_framework.decorators import api_view
 from django.shortcuts import get_list_or_404, get_object_or_404
 from .serializers import ArticleListSerializer, ArticleSerializer, CommentSerializer
 from .models import Article, Comment
-from articles import serializers
 
 # Create your views here.
 # @api_view()
