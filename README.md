@@ -123,6 +123,18 @@ TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원�
    vue - MVVM, V-
    ```
 
+
+9. `alogorithm_solve`
+
+   계절방학동안 알고리즘 문제 풀이 및 새로 배우게 된 점 !
+
+   ```
+   input.txt: 돌려보고 싶은 예제 input
+   s1.py: 문제 풀이 코드
+   concept: 이해안되는 부분은 그림으로 그려서 방법 찾기
+   WIL: 문제를 풀면서 배운 내용 글로 정리
+   ```
+   
    
 
 ## project

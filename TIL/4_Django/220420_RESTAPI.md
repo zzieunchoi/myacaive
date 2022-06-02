@@ -145,6 +145,8 @@ RESTful services, simply REST services라고도 부름
 
 지금까지 사용자의 입장에서 썼던 API를 제공자의 입장이 되어 개발해보기
 
+
+
 * API
   * application programming interface
   * API는 응용 프로그램에서 사용할 수 있도록, 운영 체제나 프로그래밍 언어가 제공하는 기능을 제어할 수 있게 만든 인터페이스
@@ -172,12 +174,15 @@ RESTful services, simply REST services라고도 부름
   * 자원을 정의하는 방법에 대한 고민
     * 정의된 자원을 어디에 위치 시킬 것인가
     
-  * REST의 자원과 주소의 지정 방법
+  * **REST의 자원과 주소의 지정 방법**(핵심규칙)
+    
     * 자원: URI
-    * 행위: HTTP METHOD
+    * 행위: HTTP method
     * 표현
       * 자원과 행위를 통해 궁극적으로 표현되는 결과물
       * JSON으로 표현된 데이터를 제공
+        * json: 자바스크립트의 표기법을 따른 단순 문자열
+        * 쉽게 변화할 수 있는 key-value 형태의 구조를 갖고 있음
     
   * 핵심 규칙
     * 정보는 URI로 표현
