@@ -20,6 +20,7 @@ import VideoDetail from './components/VideoDetail.vue'
 
 const API_KEY = 'AIzaSyCwsY3hc7fVE5Go4To7-WpDYht1Sn0hGOU'
 const API_URL = 'https://www.googleapis.com/youtube/v3/search'
+
 export default {
   name: 'App',
   components: {
