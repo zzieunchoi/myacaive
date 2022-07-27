@@ -1,8 +1,10 @@
 # ♥ 개발자 지은이 화이팅 ♥
 
-할일만 제대로!! -지은-
+놀 땐 놀고 할 때는 제대로!! -지은-
 
-## jupyter notebook
+
+
+## 폴더 1. jupyter notebook
 
 * jupyter notebook 을 사용해 배운 알고리즘 실습하기!
 
@@ -23,20 +25,24 @@
 
 
 
-## TIL
+## 폴더 2. TIL
 
 TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원에서 정리한 것!
 
-1. `0_git`
+1. `0_tool`
 
-   git을 사용하는 방식, 어떻게 커밋하고 끄는지에 관한 기초적인 방법
+   git 등 다양한 툴과 다양한 경험에 대해서  사용하는 방식, 기초적인 지식에 대해서
 
    ```
-   git의 사용 방법
-   git init , add , commit
-   git branch, branch merging
-   git 되돌리기
-   git reset, revert
+   1. git의 사용 방법
+      git init , add , commit
+      git branch, branch merging
+      git reset, revert
+   2. aws
+      배포를 위한 실습 및 command 명령어
+   3. jira,jql
+      이슈와 스토리, 에픽을 이용한 에자일 관리를 위한 지라 기초 사용 방법
+   4. 도커와 쿠버네틱스
    ```
 
    
@@ -120,26 +126,61 @@ TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원�
    Vue의 이해
 
    ```
-   vue - MVVM, V-
+   vue 사용 방법
+   vuex, vue router 등
    ```
 
 
-9. `alogorithm_solve`
-
-   계절방학동안 알고리즘 문제 풀이 및 새로 배우게 된 점 !
+9. `8_nodejs`
 
    ```
-   input.txt: 돌려보고 싶은 예제 input
-   s1.py: 문제 풀이 코드
-   concept: 이해안되는 부분은 그림으로 그려서 방법 찾기
-   WIL: 문제를 풀면서 배운 내용 글로 정리
+   nodejs를 활용한 회원 로그인, 회원가입 기능 구현
+   mongo db, express에 대한 기본 이해
    ```
-   
-10. `front_review`
 
-   1학기때 배웠던 프론트엔드 복습 및 정리!
+10. `9_java`
 
-## project
+   ```
+   java에 대한 기초 지식
+   반복문, 조건문 등 기본 문법
+   ```
+
+11. `10_SQL`
+
+    ```
+    SQL의 최대최소, 그룹, NULL, JOIN, STRING, DATE에 대한 문법
+    ```
+
+12. `alogorithm_solve`
+
+    계절방학동안 알고리즘 문제 풀이 및 새로 배우게 된 점 !
+
+    ```
+    input.txt: 돌려보고 싶은 예제 input
+    s1.py: 문제 풀이 코드
+    concept: 이해안되는 부분은 그림으로 그려서 방법 찾기
+    WIL: 문제를 풀면서 배운 내용 글로 정리
+    ```
+
+13. `front_review`
+
+    ```
+    1학기때 배웠던 VUE 복습 및 정리!
+    ```
+
+14. `계절학기`
+
+    ```
+    DB 설계 및 작성한 DB에 대한 조작 SQL 작성
+    Maria DB 설치 실습
+    node.js와 soket.io를 활용한 채팅 서버 구현
+    관계형 데이터 베이스 이해
+    비동기 프로그래밍의 이해
+    ```
+
+    
+
+## 폴더 3. project
 
 ### project 01
 
@@ -152,12 +193,4 @@ for문 돌려서 모든 dictionary 파일 돌려보기
 open('.json', encoding = )으로 json 파일 가져오기
 ```
 
-
-
-### project 02
-
-python을 활용한 데이터 수집 2
-
-```
-```
 
