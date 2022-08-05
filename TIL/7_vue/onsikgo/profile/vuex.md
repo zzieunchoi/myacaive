@@ -69,4 +69,123 @@ state의 변경 여부에 따라 view를 업데이트합니다.
   * mutation에서 state를 변경
     * state(data)를 변경할 수 있는 것은 오로지 mutations뿐!
     * filter, reduce 등 다양한 방법으로 데이터 가공 가능
-  * getter를 이용하여 다시 component에 바인딩 돼 하면 갱신
+  * getter를 이용하여 다시 component에 바인딩하면 갱신
+
+
+
+## 직접 코딩
+
+1. js 만들기 `src/store/modules/discardStore.js`
+
+   ```js
+   const discardStore = {
+     // namespaced를 true로 해야 module namespace error가 안뜸!
+     namespaced: true,
+     
+     // state 가지고 오고 싶은 변수 이름 설정
+     state: {
+       discardStoreId: "",
+       discardStoreImg: "",
+       discardStoreName: "",
+     },
+     // getters: 받아올 데이터 state와 연결
+     getters: {
+       discardStoreId: (state) => state.discardStoreId,
+       discardStoreImg: (state) => state.discardStoreImg,
+       discardStoreName: (state) => state.discardStoreName,
+     },
+     // actions 원하는 변수를 받아올 함수 지정
+     actions: {
+       discardStoreId: ({ commit }, storeId) => {
+         commit("DISCARD_STOREID", storeId);
+       },
+       discardStoreImg: ({ commit }, storeImg) => {
+         commit("DISCARD_STOREIMG", storeImg);
+       },
+       discardStoreName: ({ commit }, storeName) => {
+         commit("DISCARD_STORENAME", storeName);
+       },
+     },
+     // mutations 설정한 변수에 원하는 데이터 넣기
+     mutations: {
+       DISCARD_STOREID: (state, storeId) => {
+         state.discardStoreId = storeId;
+       },
+       DISCARD_STOREIMG: (state, storeImg) => {
+         state.discardStoreImg = storeImg;
+       },
+       DISCARD_STORENAME: (state, storeName) => {
+         state.discardStoreName = storeName;
+       },
+     },
+   };
+   
+   export default discardStore;
+   ```
+
+2. index.js에 등록하기 `src/store/index.js`
+
+   ```js
+   import Vue from "vue";
+   import Vuex from "vuex";
+   import createPersistedState from "vuex-persistedstate"
+   
+   Vue.use(Vuex);
+   
+   import discardStore from "@/store/modules/discardStore";
+   export default new Vuex.Store({
+     plugins: [createPersistedState()],
+     modules: {
+       discardStore,
+     },
+   });
+   ```
+
+3. 보낼 데이터가 있는 곳 `src/views/profile/MypageOwnerView.vue`
+
+   ```vue
+   <script>
+   import {mapActions} from "vuex";
+   export default {
+       name:"MypageOwnerView",
+       methods: {
+           ...mapActions("discardStore", ["discardStoreId", "discardStoreName", "discardStoreImg",]),
+           selectStore() {
+               //원래 정의된 this.storeId를 discardStoreId에 넣어놓음
+               // this.storeId를 불러오는 과정은 생략
+               this.discardStoreId(this.storeId);
+         		this.discardStoreName(this.storeName);
+         		this.discardStoreImg(this.storeImg);
+           }
+       }
+   }
+   </script>
+   ```
+
+4. 데이터를 받아오는 곳 `src/components/profile/StoreInfoDiscardModal.vue`
+
+   ```vue
+   <template>
+   	<div>
+           <span>{{ this.discardStoreId }}</span>
+           <span>{{ this.discardStoreName }}</span>
+           <span>{{ this.discardStoreImg }}</span>        
+       </div>
+   </template>
+   
+   <script>
+   import { mapGetters } from "vuex";
+   export default {
+       name: "NoticeModal",
+       //computed해서 mapgetters를 불러와야함!
+       computed: {
+           ...mapGetters("discardStore", [
+             "discardStoreId",
+             "discardStoreName",
+             "discardStoreImg",
+           ]),
+         },
+   </script>
+   ```
+
+   이렇게 하면 discardStoreId, discardStoreName, discardStoreImg 변수 사용 가능!!
