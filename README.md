@@ -6,22 +6,30 @@
 
 ## 폴더 1. jupyter notebook
 
-* jupyter notebook 을 사용해 배운 알고리즘 실습하기!
+* 기초개념
 
-* 설치하는 방법
+  * jupyter notebook 을 사용해 배운 알고리즘 실습하기!
+
+  * 설치하는 방법
+
 
   ```bash
   $ pip install notebook
   $ jupyter notebook
   ```
 
-  jupyter notebook 을 사용하는 동안 주피터 노트북이 실행 중인 git bash를 종료하지 않도록 주의
+  ​		jupyter notebook 을 사용하는 동안 주피터 노트북이 실행 중인 git bash를 종료하지 않도록 		주의
 
-* 종료하는 방법
+  * 종료하는 방법
 
-  주피터 화면에서 우측상단 quit 클릭
+    주피터 화면에서 우측상단 quit 클릭
 
-  or 터미널에서 `ctrl + c`누르기
+    or 터미널에서 `ctrl + c`누르기
+
+* 가상환경
+
+  * jupyter notebook에서 가상환경 설치
+
 
 
 
@@ -140,10 +148,10 @@ TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원�
 
 10. `9_java`
 
-   ```
-   java에 대한 기초 지식
-   반복문, 조건문 등 기본 문법
-   ```
+    ```
+    java에 대한 기초 지식
+    반복문, 조건문 등 기본 문법
+    ```
 
 11. `10_SQL`
 
@@ -151,7 +159,26 @@ TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원�
     SQL의 최대최소, 그룹, NULL, JOIN, STRING, DATE에 대한 문법
     ```
 
-12. `alogorithm_solve`
+12. 11_react
+
+    ```
+    react를 위한 기초개념
+    프로젝트를 통해서 혼자 학습한 내용
+    ```
+
+13. 12_AI
+
+    ```
+    PyTorch를 이용하여 AI를 통한 데이터 학습
+    ```
+
+14. 13_react_native
+
+    ```
+    react-native를 통해 안드로이드 앱 개발
+    ```
+
+15. `alogorithm_solve`
 
     계절방학동안 알고리즘 문제 풀이 및 새로 배우게 된 점 !
 
@@ -162,13 +189,13 @@ TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원�
     WIL: 문제를 풀면서 배운 내용 글로 정리
     ```
 
-13. `front_review`
+16. `front_review`
 
     ```
     1학기때 배웠던 VUE 복습 및 정리!
     ```
 
-14. `계절학기`
+17. `계절학기`
 
     ```
     DB 설계 및 작성한 DB에 대한 조작 SQL 작성
@@ -192,5 +219,4 @@ for문 돌려서 모든 dictionary 파일 돌려보기
 원하는 데이터만 가져올 수 있도록 데이터 수정하기
 open('.json', encoding = )으로 json 파일 가져오기
 ```
-
 
