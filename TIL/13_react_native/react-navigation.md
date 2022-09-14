@@ -86,3 +86,16 @@ const ProfileScreen = ({ navigation, route }) => {
 };
 ```
 
+
+
+## navigation이 error 뜰 경우!
+
+```js
+import {useNavigation} from '@react-navigation/native';
+
+// 컴포넌트 훅 함수 안에서 선언
+const navigation = useNavigation();
+
+// 그리고 navigation.navigate()사용!
+```
+
