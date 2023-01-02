@@ -1,5 +1,11 @@
 # javascript
 
+html에서
+
+`<head>`사이에 `<script>`에 저장
+
+
+
 ## intro
 
 javascript의 필요성
@@ -50,20 +56,37 @@ javascript의 필요성
 
 식별자는 변수를 구분할 수 있는 변수명
 
-* 카멜 케이스(camelCase) - 변수, 객체, 함수에 사용
-  * 두번째 단어의 첫글자부터 대문자
-* 파스칼 케이스(PascalCase) - 클래스, 생성자에 사용
-  * 모든 단어 첫번쨰 글자 대문자
-* 대문자 스네이크 케이스(SNAKE_CASE) - 상수에 사용
-  * 모든 글자 대문자 작성
+* 변수명 기술 방법
+
+  * 카멜 케이스(camelCase) - 변수, 객체, 함수에 사용
+    * 두번째 단어의 첫글자부터 대문자
+
+  * 파스칼 케이스(PascalCase) - 클래스, 생성자에 사용
+    * 모든 단어 첫번쨰 글자 대문자
+
+  * 대문자 스네이크 케이스(SNAKE_CASE) - 상수에 사용
+    * 모든 글자 대문자 작성
+
+  * underscore 기법 - 변수
+    * 단어마다 underscore 사용
+    * my_variable
 
 
 
-식별자는 반드시 문자, 달러 또는 밑줄로 시작
 
-대소문자를 구분하며, 클래스명 외에 모두 소문자로 시작
+* 변수명 지정 규칙
+  * 식별자는 반드시 문자, 달러 또는 밑줄로 시작(숫자로 시작 x)
+  * 대소문자를 구분하며, 클래스명 외에 모두 소문자로 시작
+  * 예약어 사용 불가능(for, if, function)
+  * 공백 불가
 
-예약어 사용 불가능(for, if, function)
+
+
+* 자료형
+  * 기본형
+    * 숫자형, 문자형, 논리형, undefined, null
+  * 참조형
+    * 배열, 함수, 객체
 
 
 
@@ -71,51 +94,55 @@ javascript의 필요성
 
 * let
   * **재할당 할** 예정인 변수 선언시 사용
+  
   * 변수 재선언 불가능
+  
   * 블록 스코프
-
-```javascript
-let foo // 선언
-console.log(foo)
-
-foo = 1 // 할당
-console.log(foo)
-
-let bar = 0 // 선언+ 할당
-console.log(bar)
-```
-
-```javascript
-let number = 10
-number = 10
-console.log(number) // 가능
-```
-
-```javascript
-let number = 10
-let number = 50 // 불가능
-```
-
-
+  
+    ```javascript
+    let foo // 선언
+    console.log(foo)
+    
+    foo = 1 // 할당
+    console.log(foo)
+    
+    let bar = 0 // 선언+ 할당
+    console.log(bar)
+    ```
+  
+    ```javascript
+    let number = 10
+    number = 10
+    console.log(number) // 가능
+    ```
+  
+    ```javascript
+    let number = 10
+    let number = 50 // 불가능
+    ```
+  
+    
 
 * const
   * **재할당 할 예정이 없는** 변수 선언시 사용
+  
   * 변수 재선언 불가능
+  
   * 블록스코프
+  
+    ```javascript
+    const number = 10
+    number = 10 // 불가능
+    ```
+  
+    ```javascript
+    const number = 10
+    const number = 50 // 불가능
+    ```
 
-```javascript
-const number = 10
-number = 10 // 불가능
-```
-
-```javascript
-const number = 10
-const number = 50 // 불가능
-```
 
 
-
-블록 스코프 
+### 블록 스코프
 
 if, for, 함수 등의 중괄호 내부를 가리킴
 
@@ -132,7 +159,7 @@ console.log(x) //1
 
 
 
-변수 선언 키워드 var
+### 변수 선언 키워드 var
 
 구버전 자바스크립트는 var로 변수를 선언함
 
@@ -141,6 +168,8 @@ console.log(x) //1
 
 
 ![image-20220425141704998](220425.assets/image-20220425141704998.png)
+
+
 
 ## 데이터 타입
 
@@ -164,7 +193,11 @@ console.log(x) //1
 
    : ${expression}  형태로 표현식 삽입 가능
 
-   따옴표 대신 ``으로 표현
+   큰따옴표, 작은따옴표 모두 사용 가능
+
+   `"I'm a boy"`
+
+   `'I\'m a boy` 둘다 사용 가능
 
 3. undefined(값이 없긴 한데 개발자 의도 없어)
 
@@ -195,8 +228,141 @@ console.log(x) //1
 * 다른 변수에 복사할 때 참조 값이 복사됨
 
 1. 함수
+
+   ```javascript
+   function sum(a, b) {
+       var s = a+b;
+       return s;
+   }
+   document.write(sum(1, 2));
+   
+   // 일반적인 함수 지정
+   function aaa(name) {
+        console.log("안녕하세요 저는 " + name + " 입니다.");
+    }
+   aaa("최지은");
+   
+   // 함수 이름 없이 지정 (변수명을 지정해준 것임)
+   var bbb = function (name) {
+       console.log("안녕하세요 저는 " + name + " 입니다.");
+   };
+   bbb("최지은");
+   
+   // 그래서 aaa()는 부를 수 있지만 bbb()는 바로 실행하지 않으면 x
+   (function abc() {
+       aaa();
+       bbb(); //에러 뜸
+   })();
+   ```
+
+   * 콜백함수
+
+     call(실행) + back(뒤)
+
+     함수를 매개변수로 전달해서 함수 내부에서 실행
+
+     ```javascript
+     function ccc() {
+         console.log("ccc함수 호출");
+     }
+     
+     function ddd(func) {
+         func();
+     }
+     ddd(ccc);
+     
+     // 계산기
+     function plus(x, y) {
+         return x + y;
+     }
+     
+     function calculator(func, x, y) {
+         return func(x, y);
+     }
+     
+     var r = calculator(plus, 1, 2);
+     console.log(r);
+     // 3
+     
+     // 익명함수도 사용 가능
+     var r = calculator(
+         function (x, y) {
+             console.log(x * y);
+         },
+         1,
+         2
+     );
+     ```
+
+   * arguments <span style="color:red">함수 선언시 동일하게 맞춰서 코딩해야하기 때문에 더 헷갈림</span>
+
+     파라미터의 정보가 담긴 객체
+
+     배열 형태로 저장
+
+     모든 함수에 무조건 존재
+
+     ```javascript
+      function aaa() {
+          console.log(typeof arguments);
+          console.log(arguments);
+          console.log(arguments[2]);
+      }
+     
+     aaa(1, 2, 3, 4, 5);
+     ```
+
 2. 배열
+
 3. 객체
+
+   ```javascript
+   var obj = {a:1, b:2, c:3};
+   document.write(obj.a);
+   document.write(obj['a']);
+   ```
+
+
+
+### 형변환
+
+* 암시적 형변환
+
+  ```javascript
+  var a = 1;
+  var b = "2";
+  var c = a + b;
+  document.write(typeof c);
+  // string
+  
+  var d = "1";
+  var e = true;
+  var f = a + b;
+  document.write(typeof f);
+  // string
+  
+  var x = "2";
+  var y = 1;
+  var z = x - y;
+  document.write(typeof z);
+  // number
+  ```
+
+* 명시적 형변환
+
+  * String()
+  * Number()
+  * parseInt()
+
+  ```javascript
+  var a = 1;
+  document.write(typeof(a));
+  
+  var b = String(a);
+  document.write(typeof(b));
+  ```
+
+  
 
 
 
@@ -258,7 +424,7 @@ console.log(x) //1
    const b = '1004'
    console.log(a === b) // false
    ```
-   
+
 5. 논리 연산자
 
    and: $$
@@ -281,11 +447,44 @@ console.log(x) //1
    console.log(result) // NO
    ```
 
-   
+7. 증감 연산자
 
+   전위연산자, 후위 연산자
+
+   ```javascript
+   // 전위 연산
+   var a = 1;
+   var b = ++a;
+   document.write("a=" + a + " b=" + b);
+   // a=2 b=2
    
+   // 후위 연산
+   var c = 1;
+   var d = c++;
+   document.write("c=" + c + " d=" + d);
+   // c=2 d=1
+   ```
+
+
+
+* 참조형 대입 연산은 값 자체가 대입 되는 것이 아님
+
+  메모리 주소 값이 대입되는거라
+
+  새로운 변수에는 주소만 저장되어있으므로 이전 변수 값이 변경되는 경우 새로운 변수도 값이 변경됨
+
+  ```javascript
+  var arr1 = [0, 1, 2];
+  var arr2 = arr1;
+  arr1[0] = 10;
+  document.write(arr2[0]);
+  ```
+
+  
 
 ## 조건/반복
+
+### 조건
 
 if: 조건 표현식의 결과값을 boolean 타입으로 변환 후 참 / 거짓을 판단
 
@@ -344,7 +543,7 @@ switch(nation) {
 
 
 
-반복문
+### 반복
 
 while
 
