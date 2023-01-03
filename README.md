@@ -53,8 +53,6 @@ TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원�
    4. 도커와 쿠버네틱스
    ```
 
-   
-
 3. `1_python`
 
    python에 대한 기초 지식
@@ -159,43 +157,43 @@ TODAY I LEARNED 라는 의미로 오늘 내가 공부한 것들을 복습차원�
     SQL의 최대최소, 그룹, NULL, JOIN, STRING, DATE에 대한 문법
     ```
 
-12. 11_react
+12. `11_react`
 
     ```
     react를 위한 기초개념
     프로젝트를 통해서 혼자 학습한 내용
     ```
 
-13. 12_AI
+13. `12_AI`
 
     ```
     PyTorch를 이용하여 AI를 통한 데이터 학습
     ```
 
-14. 13_react_native
+14. `13_react_native`
 
     ```
     react-native를 통해 안드로이드 앱 개발
     ```
 
-15. `alogorithm_solve`
-
-    계절방학동안 알고리즘 문제 풀이 및 새로 배우게 된 점 !
+15. `14_typeScript`
 
     ```
-    input.txt: 돌려보고 싶은 예제 input
-    s1.py: 문제 풀이 코드
-    concept: 이해안되는 부분은 그림으로 그려서 방법 찾기
-    WIL: 문제를 풀면서 배운 내용 글로 정리
     ```
 
-16. `front_review`
+16. `15_jsp`
+
+    ```
+    
+    ```
+
+17. `front_review`
 
     ```
     1학기때 배웠던 VUE 복습 및 정리!
     ```
 
-17. `계절학기`
+18. `계절학기`
 
     ```
     DB 설계 및 작성한 DB에 대한 조작 SQL 작성
