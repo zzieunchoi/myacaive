@@ -113,10 +113,173 @@
   
   * 이후: 매퍼 인터페이스 방식(작업량도 적고 편리)
   
-    jdbc, db이후의 작업을 개발자가 할 필요없고 자동적으로 해줌!
-
-
-
+    jdbc, db이후의 작업을 개발자가 할 필요없고 자동적으로 해줌!(로직에만 집중해!)
+    
+    DAO 가 필요없어지고 대신, 인터페이스를 만들음!
+    
+    * 매퍼 인터페이스 생성
+    * XML이 인터페이스와 동일한 패키지 내에 있어야함
+      * xml은 src/main/resources 폴더 안에 넣고 이름만 동일하면 됨!
+    * 인터페이스명과 XML 이름이 동일해야함
+    * XML의 ID와 동일한 이름으로 추상메서드 정의
+    
+    ```xml
+    <!--chap5/EmpMapper.xml-->
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="chap5.EmpMapper">
+    	<select id="all" resultType="chap5.EmpVO">
+    		SELECT * FROM emp
+    	</select>
+    	
+    	<insert id="empInsert" parameterType="chap5.EmpVO">
+    		INSERT INTO emp (empno,ename,job)
+    		VALUES
+    		(#{empno}, #{ename}, #{job})
+    	</insert>
+    </mapper>
+    ```
+    
+    인터페이스: EmpMapper.java
+    
+    ```java
+    package chap5;
+    
+    import java.util.List;
+    import org.apache.ibatis.annotations.Mapper;
+    
+    @Mapper
+    public interface EmpMapper {
+    	List<EmpVO> all();
+    	int empInsert(EmpVO vo);
+    }
+    ```
+    
+    설정 MvcConfig.java
+    
+    ```java
+    package chap5;
+    
+    import org.apache.ibatis.session.SqlSessionFactory;
+    import org.mybatis.spring.SqlSessionFactoryBean;
+    import org.mybatis.spring.SqlSessionTemplate;
+    import org.mybatis.spring.annotation.MapperScan;
+    import org.springframework.context.annotation.Bean;
+    import org.springframework.context.annotation.ComponentScan;
+    import org.springframework.context.annotation.Configuration;
+    import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+    import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+    import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+    import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
+    import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+    
+    import com.zaxxer.hikari.HikariConfig;
+    import com.zaxxer.hikari.HikariDataSource;
+    
+    @Configuration
+    // mvc 활성화 시키는 역할
+    @EnableWebMvc
+    @ComponentScan(basePackages = {"chap5"})
+    @MapperScan(basePackages = {"chap5"})
+    public class MvcConfig implements WebMvcConfigurer{
+    	
+    	@Override
+    	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+    		configurer.enable();
+    	}
+    	
+    	// view resolver 설정
+    	@Override
+    	public void configureViewResolvers(ViewResolverRegistry registry) {
+    		registry.jsp("/WEB-INF/views/", ".jsp");
+    	}
+    	
+    	// HikariCP의 설정
+    	@Bean
+    	public HikariConfig hikariConfig() {
+    		HikariConfig hikariConfig = new HikariConfig();
+    		hikariConfig.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+    		hikariConfig.setJdbcUrl("jdbc:oracle:thin:@localhost:1521:xe");
+    		hikariConfig.setUsername("testuser");
+    		hikariConfig.setPassword("test1234");
+    		return hikariConfig;
+    	}
+    	
+    	//Datasource 객체
+    	@Bean
+    	public HikariDataSource dataSource() {
+    		HikariDataSource ds = new HikariDataSource(hikariConfig());
+    		return ds;
+    	}
+    	
+    	// SqlSessionFactory 객체
+    	@Bean
+    	public SqlSessionFactory sqlSessionFactory() throws Exception {
+    		SqlSessionFactoryBean ssf = new SqlSessionFactoryBean();
+    		ssf.setDataSource(dataSource());
+    		
+    		//SqlSesstionTemplate 방식으로 하는 경우 매퍼(mapper) 파일의 위치 지정
+    		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+    		ssf.setMapperLocations(resolver.getResources("classpath:/mapper/emp.xml")); // mapper 파일 경로 지정
+    		
+    		return ssf.getObject();	
+    	}
+    	
+    	//DAO에서 주입받을 객체
+    	@Bean
+    	public SqlSessionTemplate sqlSessionTemplate() throws Exception {
+    		SqlSessionTemplate sst = new SqlSessionTemplate((sqlSessionFactory()));
+    		return sst;
+    	}
+    }
+    ```
+    
+    EmpController.java
+    
+    ```java
+    package chap5;
+    
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.stereotype.Controller;
+    import org.springframework.ui.Model;
+    import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.PostMapping;
+    
+    @Controller
+    public class EmpController {
+    
+    	@Autowired	
+    	EmpMapper mapper;
+    	
+    	@GetMapping("/emp/list.ssg")
+    	public String list(Model model) {
+    		model.addAttribute("list", mapper.all());
+    		return "emp/list";
+    	}
+    	
+    	@GetMapping("/emp/write.ssg")
+    	public String write() {
+    		return "emp/write";
+    	}
+    	
+    	@PostMapping("/emp/write.ssg")
+    	public String insert(EmpVO vo, Model model) {
+    		int r= mapper.empInsert(vo);
+    		if (r> 0) {
+    			// 정상 등록
+    			model.addAttribute("msg", "정상적으로 등록되었습니다.");
+    			model.addAttribute("url", "list.ssg");
+    		} else {
+    			model.addAttribute("msg", "등록실패");
+    			model.addAttribute("url", "write.ssg");
+    		}
+    		return "emp/insert";
+    	}
+    }
+    ```
+    
+    
+  
 * ...Factory, ....Builder : 객체를 생성해주는 것
   * 인터페이스라 직접 생성이 안됨
 
