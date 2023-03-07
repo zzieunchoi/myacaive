@@ -341,36 +341,192 @@ from (
 
 ## 최댓값과 최솟값을 배제한 평균 계산
 
+```sql
+select round(avg(sal), 2) avg
+from (
+  select sal, min(sal) over() min_sal, max(sal) over() max_sal
+  from emp
+) x
+where sal not in (min_sal, max_sal);
+```
+
+min(sal) over() 이렇게 하면 sal의 min  값이 전체 행에 나타남
+
 
 
 ## 일, 월, 연도 가감하기
+
+```SQL
+SELECT HIREDATE,
+	   HIREDATE -5 AS HD_MINUS_5D,
+	   HIREDATE +5 AS HD_PLUS_5D,
+	   ADD_MONTHS(HIREDATE, -5) AS HD_MINUS_5M,
+	   ADD_MONTHS(HIREDATE, 5) AS HD_PLUS_5M,
+	   ADD_MONTHS(HIREDATE, -5*12) AS HD_MINUS_5Y
+FROM EMP;
+```
 
 
 
 ## 두 날짜 사이의 일수 알아내기
 
+```sql
+create table hd_2 (
+  hiredate date,
+  ename varchar(20)
+);
+
+insert into hd_2 values(to_date('1981-02-22', 'YYYY-MM-DD'), 'WARD');
+insert into hd_2 values(to_date('1981-02-20', 'YYYY-MM-DD'), 'ALIEN');
+
+SELECT WARD_HD, ALIEN_HD, WARD_HD - ALIEN_HD
+FROM (
+  SELECT HIREDATE AS WARD_HD
+  FROM HD_2
+  WHERE ENAME='WARD'
+) X,
+(
+  SELECT HIREDATE AS ALIEN_HD
+  FROM HD_2
+  WHERE ENAME='ALIEN'
+) Y;
+```
+
 
 
 ## 두 날짜 사이의 영업일 수 알아내기
+
+영업일은 토요일이나 일요일이 아닌 모든 날
+
+```SQL
+select sum(CASE WHEN to_char(jones_hd + t100.id -1, 'DY') IN ('SAT', 'SUN') THEN 0
+           ELSE 1 
+           END) AS DAYS
+FROM (SELECT MAX(CASE WHEN ENAME='BLAKE' THEN HIREDATE 
+                 END) AS BLAKE_HD,
+             MAX(CASE WHEN ENAME='JONES' THEN HIREDATE
+                 END) AS JONES_HD
+     FROM EMP
+     WHERE ENAME IN ('BLAKE', 'JONES')) X,
+     t100
+WHERE t100.ID <= BLAKE_HD-JONES_HD+1;
+```
+
+
+
+TO_CHAR(SYSDATE, 문자)
+
+* D ; 1 ~7
+* DY; 목
+* DAY: 목요일
+
+
+
+CASE_WHEN
+
+* 모든 조건을 만족하지 않았는데 ELSE도 없다면 NULL 값 출력
 
 
 
 ## 두 날짜 사이의 시, 분, 초 알아내기
 
+``` SQL
+SELECT DY*24 AS HR, DY*24*60 AS MIN, DY*24*60*60 AS SEC
+FROM (SELECT (MAX(CASE WHEN ENAME='WARD' THEN HIREDATE END) -
+              MAX(CASE WHEN ENAME='ALIEN' THEN HIREDATE END)) AS DY
+      FROM EMP
+      WHERE ENAME IN ('WARD','ALIEN')
+     ) X;
+```
+
+날짜 - 날짜 하면 일이 나오는 것이 기본 값
+
 
 
 ## 특정 월의 마지막 날 조회
 
+```SQL
+SELECT TO_CHAR(LAST_DAY(ADD_MONTHS(TRUNC(SYSDATE, 'y'), 1)), 'DD') AS "2월 마지막날"
+FROM DUAL;
 
-
-
-
-```sql
-select max(sal) keep(dense_rank first order by cnt desc) sal
-from (
-    select sal, count(*) cnt
-    from employ
-    group by sal
-)
+SELECT LAST_DAY(SYSDATE) 
+FROM DUAL;
+/* 이것도 그렇게 나오는데 왜 이렇게 어렵게 하지.. */
 ```
 
+* TRUNC(SYSDATE, 'y') => 전월 첫번째 일(01-JAN-23)
+
+* ADD_MONTHS(TRUNC(SYSDATE, 'y'), 1) => 이번달 첫번째 일(01-FEB-23)
+* LAST_DAY(ADD_MONTHS(TRUNC(SYSDATE, 'y'), 1))  => 이번달 마지막 날(28-FEB-23)
+
+
+
+### 집합
+
+#### UNION 합집합
+
+두 테이블의 결합, 결합시키는 두 테이블의 중복되지 않은 값들을 반환
+
+```SQL
+SELECT DEPTNO FROM EMP
+UNION
+SELECT DEPTNO FROM DEPT;
+```
+
+
+
+* 합집합 할 때 존재하지 않는 컬럼을 처리할 떄는 컬럼이름 앞에 0, NULL 등 기본 값을 부여하면 됨
+
+```SQL
+SELECT DATE_FORMAT(SALES_DATE,'%Y-%m-%d') B, PRODUCT_ID, USER_ID, SALES_AMOUNT 
+FROM ONLINE_SALE
+
+UNION
+
+SELECT DATE_FORMAT(SALES_DATE,'%Y-%m-%d') B, PRODUCT_ID, NULL USER_ID, SALES_AMOUNT 
+FROM OFFLINE_SALE 
+```
+
+ONLINE_SALE에는 USER_ID가 있는데 OFFLINE_SALE에는 USER_ID가 없어서 NULL로 부여
+
+
+
+#### UNION ALL  합집합
+
+두 테이블의 중복되는 값까지 반환
+
+```SQL
+SELECT DEPTNO FROM EMP
+UNION ALL
+SELECT DEPTNO FROM DEPT;
+```
+
+
+
+#### INTERSECT 교집합
+
+두 행의 집합 중 공통된 행 반환
+
+```SQL
+SELECT DEPTNO FROM EMP
+INTERSECT
+SELECT DEPTNO FROM DEPT;
+```
+
+
+
+#### MINUS  차집합
+
+첫번째 SELECT 문에 의해 반환되는 행 중에서 두번째 SELECT 문에 의해 반환되는 행에 존재하지 않는 행 반환
+
+```SQL
+SELECT DEPTNO FROM DEPT
+MINUS
+SELECT DEPTNO FROM EMP;
+```
+
+
+
+* count(distinct)
+  * 중복된 값을 제외한 행의 개수 세는 방법
+  * count(idstinct 변수 이름)
