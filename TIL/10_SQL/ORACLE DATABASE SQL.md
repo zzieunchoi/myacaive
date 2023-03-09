@@ -524,13 +524,124 @@
   * TRIM
   * REPLACE
 
+
+
 ### NUMBER FUNCTIONS
+
+* round: 특정 소수점으로 반올림
+  * 인자가 2이면 -> 소수 셋째 자리에서 반올림
+* trunc: 특정 소수점으로 내림
+* mod: 나누고 난 나머지
+* dual이라는 테이블: 계산, 함수로부터 결과를 살펴보기 위한 테이블
 
 
 
 ### WORKING WITH DATES
 
+* sysdate: date, time을 반환 해주는 함수
 
+  ```sql
+  select sysdate
+  from dual;
+  ```
+
+* 날짜로 숫자를 더하거나 뺄 수 있음
+
+  * date + number
+  * date - number
+
+* 날짜들 사이의 일수를 날짜 뺌으로써 알 수 있음
+
+  * date - date
+
+* 날짜에 시간을 더할 수 있음
+
+  * date + number/24
+
+  ```sql
+  SELECT LAST_NAME, (SYSDATE-HIRE_DATE) / 7 AS WEEKS
+  FROM EMPLOYEES
+  WHERE DEPARTMENT_ID = 90;
+  ```
+
+  
 
 ### DATE FUNCTIONS
+
+* DATE-MANIPULATION FUNCTIONS
+  * MONTHS_BETWEEN(date1, date2)
+  * ADD_MONTHS(date, n)
+  * NEXT_DAY(date, 'char')
+    * next_day(date, 'friday') : 이 date이 후에 첫 금요일
+  * LAST_DAY(date)
+    * 그 달의 마지막 날
+  * ROUND
+    * round(sysdate, 'month') : 한 달 단위로 반올림
+  * TRUNC
+
+
+
+## CHAPTER 5. USING CONVERSION FUNCTIONS AND CONDITIONAL EXPRESSIONS
+
+* TO_CHAR, TO_NUMBER, TO_DATE
+* SELECT 문에 조건절 적용하기
+
+
+
+### IMPLICIT AND EXPLICIT DATA TYPE CONVERSION(절대적인 형변환)
+
+* implicit data type conversion(절대적인 데이터 형변환)
+  * varchar2 or char <=> number
+  * varchar2 or char <=> date
+
+
+
+* explicit data type conversion(명확한 데이터 형변환)
+  * number -> character: to_char
+  * character -> date : to_date
+  * character -> number : to_number
+  * date -> character: to_char
+
+
+
+### TO_CHAR, TO_DATE, TO_NUMBER FUNCTIONS
+
+* to_char
+
+  * to_char(date,'format_model')
+  * 포맷 모델의 특징
+    * ' '로 감싸져있어야함
+    * 대소문자 구분필수
+    * 유효한 날짜 포맷 요소를 표현할 수 있음
+    * 공백은 자동적으로 사라짐
+    * 이 때 중간에 글자를 넣고 싶다면 쌍따옴표로 감싸야함
+
+  ```sql
+  SELECT EMPLOYEE_ID, TO_CHAR(HIRE_DATE, 'MM/YY') MONTH_HIRED
+  FROM EMPLOYEES
+  WHERE LAST_NAME = 'Higgins';
+  
+  SELECT LAST_NAME, TO_CHAR(HIRE_DATE, 'fmDdepth "of" Month YYYY fmHH:MI:SS AM') HIRE_DATE
+  FROM EMPLOYEES;
+  ```
+
+* TO_NUMBER AND TO_DATE
+
+  ```SQL
+  SELECT LAST_NAME, HIRE_DATE
+  FROM EMPLOYEES
+  WHERE HIRE_DATE = TO_DATE('May 24, 1999', 'fxMonth DD, YYYY')
+  ```
+
+  
+
+### NESTING FUNCTIONS
+
+
+
+### GENERAL FUNCTIONS
+
+
+
+### CONDITIONAL EXPRESSIONS
 
