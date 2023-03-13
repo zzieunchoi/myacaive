@@ -609,39 +609,154 @@
 * to_char
 
   * to_char(date,'format_model')
+
   * 포맷 모델의 특징
     * ' '로 감싸져있어야함
     * 대소문자 구분필수
     * 유효한 날짜 포맷 요소를 표현할 수 있음
     * 공백은 자동적으로 사라짐
     * 이 때 중간에 글자를 넣고 싶다면 쌍따옴표로 감싸야함
+    * fm표기법 존재
+      * 숫자 -> 문자 시, 첫 번째 자리에 0이있을 때 0생략되어 표출되는 경우가 많음
+      * fm: 좌우 공백 제거
+      * 9: 가변적인 값으로 0이거나 숫자가 없을 시 값을 버린다
+      * 0: 고정적인 값으로 변환된 숫자의 길이를 맞추고 싶으면 원하는 길이만큼 0으로 채워줌
+      * ex)
+        * TO_CHAR(0.123, 'FM999.9999') => .123
+        * TO_CHAR(0.123,' FM000.000') => 000.123
+        * TO_CHAR(0.1230, 'FM000.000') => 000.123
+    
+  * TO_CHAR를 날짜에 적용할 떄 
 
-  ```sql
-  SELECT EMPLOYEE_ID, TO_CHAR(HIRE_DATE, 'MM/YY') MONTH_HIRED
-  FROM EMPLOYEES
-  WHERE LAST_NAME = 'Higgins';
-  
-  SELECT LAST_NAME, TO_CHAR(HIRE_DATE, 'fmDdepth "of" Month YYYY fmHH:MI:SS AM') HIRE_DATE
-  FROM EMPLOYEES;
-  ```
+     ```SQL
+     SELECT EMPLOYEE_ID, TO_CHAR(HIRE_DATE, 'MM/YY') MONTH_HIRED
+     FROM EMPLOYEES
+     WHERE LAST_NAME = 'Higgins';
+     
+     SELECT LAST_NAME, TO_CHAR(HIRE_DATE, 'fmDdepth "of" Month YYYY fmHH:MI:SS AM') HIRE_DATE
+     FROM EMPLOYEES;
+     ```
+
+  * TO_CHAR를 숫자에 적용할 떄 
+
+    ``` SQL
+    SELECT TO_CHAR(SALARY, '$99,999.00') SALARY
+    FROM EMPLOYEES
+    WHERE LAST_NAME = 'Ernsr';
+    ```
+
+    * 9: 가변적인 값 -> 있으면 쓰는거고 없으면 없는것임
+    * 0: 고정적인 값 -> 없더라고 무조건 표기
+    * $: 달러 표시
 
 * TO_NUMBER AND TO_DATE
+
+  * fx modifier
+    * 포맷이 날짜의 포맷과 정확히 일치하는지 체크
+    * update 문에서 to_date를 사용하여 데이터를 갱신할 때 기존의 데이터포맷과 동일성여부를 체크
+      * -> 일치하는 경우에만 데이터 갱신 가능
+      * 데이터의 일관성에 유용
 
   ```SQL
   SELECT LAST_NAME, HIRE_DATE
   FROM EMPLOYEES
   WHERE HIRE_DATE = TO_DATE('May 24, 1999', 'fxMonth DD, YYYY')
   ```
-
+  
   
 
 ### NESTING FUNCTIONS
+
+중첩되어있는 함수들은 가장 안쪽부터 최근 단계까지 올라와서 계산됨
+
+```SQL
+SELECT LAST_NAME, UPPER(CONCAT(SUBSTR(LAST_NAME, 1, 8), '_US'))
+FROM EMPLOYEES
+WHERE DEPARTMENT_ID = 60;
+```
 
 
 
 ### GENERAL FUNCTIONS
 
+* NVL(expr1, expr2)
 
+  * null을 실제값으로 변경
+
+  ```sql
+  SELECT LAST_NAME, (SALARY * 12) + (SALARY * 12 * NVL(COMMISION_PCT, 0)) AN_SAL
+  FROM EMPLOYEES;
+  ```
+
+  
+
+* NLV2(expr1, expr2, expr3)
+
+  * expr1이 null 이 아니면 expr2가 되고
+  * null이면 expr3
+
+  ```SQL
+  SELECT LAST_NAME, SALARY, NVL2(COMMISION_PCT, 'SAL+COMM', 'SAL') INCOME
+  FROM EMPLOYEES;
+  ```
+
+  
+
+* NULLIF(expr1, expr2)
+
+  * 두 expr을 비교해서 같으면 null, 같지 않으면 expr1
+
+  ```SQL
+  SELECT NULLIF(LENGTH(FIRTS_NAME), LENGTH(LAST_NAME)) 
+  FROM EMPLOYEES;
+  ```
+
+  
+
+* COALESCE(expr1, expr2, ..., exprn)
+
+  * expr들 중에 처음으로 null이 아닌 값을 반환
+
+  ```SQL
+  SELECT LAST_NAME, EMPLOYEE_ID, COALESCE(TO_CHAR(COMMISSION_PCT), TO_CHAR(MANAGER_ID), 'NO')
+  FROM EMPLOYEES;
+  ```
+
+  
 
 ### CONDITIONAL EXPRESSIONS
 
+* CASE 
+
+  * CASE WHEN .. THEN
+
+    ​		  WHEN .. THEN
+
+    ​          ELSE
+
+    END
+
+  * ```SQL
+    SELECT CASE JOB_ID WHEN 'IT_PROG' THEN 1.10*SALARY
+    				   WHEN 'ST_CLERK' THEN 1.15*SALARY
+    	   ELSE SALARY
+    	   END
+    FROM EMPLOYEES;
+    ```
+
+    
+
+* DECODE
+
+  * IF- THEN -ELSE와 유사한 구문
+
+  * decode(해당 변수명, 해당 변수명이 그 값이라면, expr1, 해당 변수명이 이 값이라면, expr2)
+
+  * ```SQL
+    SELECT DECODE(JOB_ID, 'IT_PROG', 1.10*SALARY,
+                 		  'ST_CLERK'. 1.15*SALARY,
+                 SALARY)
+    FROM EMPLOYEES
+    ```
+
+    
