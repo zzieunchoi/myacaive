@@ -760,3 +760,477 @@ WHERE DEPARTMENT_ID = 60;
     ```
 
     
+
+## CHAPTER 6. REPORTING AGGREGATED DATA USING THE GROUP FUNCTIONS
+
+* GROUP  함수
+* HAVING 절
+
+
+
+### GROUP FUNCTIONS
+
+* group 힘수: 한 그룹 당 하나의 결과를 주기 위해 행의 세트를 작동한다
+  * 그룹 함수의 종류
+    * avg, count, max, min, stddev, sum, variance
+    *  null 값은 모두 무시
+
+
+
+* syntax
+
+  ```sql
+  SELECT GROUP_FUNCTION(COLUMN), ..
+  FROM TABLE
+  [WHERE CONDITION];
+  ```
+
+  
+
+* DISTINCT
+
+  * 중복을 없앤 값들만을 대상으로 GROUP BY 함수 실행
+
+    ```SQL
+    SELECT COUNT(DISTINCT DEPARTMENT_ID)
+    FROM EMPLOYEES;
+    ```
+
+* NVL
+
+  * NVL과 같이 NULL을 포함한 값을 핸들링할 수 있는 함수를 사용할 수도 있음
+
+    ```SQL
+    SELECT AVG(NVL(COMMISION_PCT, 0))
+    FROM EMPLOYEES;
+    ```
+
+    
+
+### GROUPING ROWS
+
+이전까지는 하나의 큰 테이블로 생각했다면, GROUP BY  함수를 사용한다면 작은 그룹으로 나눌 수 있음
+
+
+
+```SQL
+SELECT COLUMN, GROUP_FUNCTION(COLUMN)
+FROM TABLE
+[WHERE CONDITION]
+[GROUP BY GROUP_BY_EXPRESSION]
+[ORDER BY COLUMN];
+```
+
+
+
+* illegal queries using group functions
+
+  * group 함수를 쓰려면 group by가 반드시 있어야함
+
+    ```sql
+    SELECT DEPARTMENT_ID, COUNT(LAST_NAME)
+    FROM EMPLOYEES;
+    
+    => 에러!
+    ```
+
+  * GROUP_BY 로 설정한 변수 외에 다른 컬럼을 SELECT 절에 놓으면 안됨
+
+    ```SQL
+    SELECT DEPARTMENT_ID, JOB_ID, COUNT(LAST_NAME)
+    FROM EMPLOYEES
+    GROUP BY DEPARTMENT_ID;
+    
+    => 에러!
+    ```
+
+
+
+* 하면 안되는 SQL 문!
+  * 그룹을 제한하기 위해서는 WHERE 절을 쓸수 없다
+  * 대신, HAVING 절을 사용할 수 있다
+  * WHERE 절에 GROUP 함수를 쓸수 없다 EX) AVG, SUM, ...
+
+
+
+* having 절
+
+  * 행이 그룹핑 되어있고
+  * 그룹 함수가 적용되고
+  * having에 맞는 그룹들이 보여짐
+
+  ```sql
+  SELECT DEPARTMENT_ID, MAX(SALARY)
+  FROM EMPLOYEE
+  WHERE CONDITION
+  GROUP BY GROUP_BY_EXPRESSION
+  HAVING MAX(SALARY) > 10000;
+  ORDER BY COLUMN;
+  ```
+
+  
+
+### NESTING GROUP FUNCTIONS
+
+중첩된 그룹 함수는 GROUP BY 가 필수적임
+
+```SQL
+SELECT MAX(AVG(SALARY))
+FROM EMPLOYEES
+GROUP BY DEPARTMENT_ID;
+```
+
+
+
+## CHAPTER 7. DISPLAYING DATA FROM MULTIPLE TABLES USING JOINS
+
+### TYPES OF JOINS AND ITS SYNTAX
+
+* 두 개이상의 테이블에서 데이터를 얻기 위해서는 JOIN을 써야함
+
+* 두 개이상의 테이블에 있는 열 이름들의 권한을 주기 위해서 테이블 명명을 사용해야함
+* table 명이 아닌 alias를 사용
+* 다른 테이블에 같은 이름이 있을 때는 column alias를 사용
+
+
+
+### NATURAL JOIN
+
+두개의 테이블 사이에 같은 열의 이름이 있는 모든 열을 기준으로 병합
+
+```sql
+SELECT DEPARTMENT_ID, DEPARTMENT_NAME, LOCATION_ID, CITY
+FROM DEPARTMENTS
+NATURAL JOIN LOCATIONS;
+```
+
+WHERE절로 다른 제약 조건을 추가할 수 있음
+
+
+
+### JOIN WITH THE USING CLAUSE
+
+natural join과 상호 배타적인 절
+
+만약 몇몇개의 열이 같은 이름을 갖고 있지만 데이터 타입이 다르다면, 조인을 위해 열들을 구체화하는 using 절을 사용
+
+```SQL
+SELECT EMPLOYEE_ID, LAST_NAME, LOCATION_ID, DEPARTMENT_ID
+FROM EMPLOYEES JOIN DEPARTMENTS
+USING (DEPARTMENT_ID);
+```
+
+DEPARTMENT_ID가 두테이블에 있어서 그 열을 기준으로 병합
+
+
+
+using 절에 사용되는 컬럼에는 alias를 하면 안됨
+
+```SQL
+SELECT L.CITY, D.DEPARTMENT_NAME
+FROM LOCATIONS L
+JOIN DEPARTMENTS D
+USING (LOCATION_ID)
+WHERE D.LOCATION_ID = 1400;
+
+=> 에러!
+```
+
+
+
+```SQL
+SELECT L.CITY, D.DEPARTMENT_NAME
+FROM LOCATIONS L
+JOIN DEPARTMENTS D
+USING (LOCATION_ID)
+WHERE LOCATION_ID = 1400;
+
+=> 정상
+```
+
+
+
+### JOIN WITH THE ON CLAUSE
+
+조인 조건을 명확하게 하기 위해 on 절을 사용. 
+
+where 절에 있는 조건들과 명확하게 구분할 수 있음!
+
+
+
+```SQL
+SELECT E.EMPLOYEE_ID, E.LAST_NAME, E.DEPARTMENT_ID, D.DEPARTMENT_ID, D.LOCATION_ID
+FROM EMPLOYEES E
+JOIN DEPARTMENTS D
+ON (E.DEPARTMENT_ID = D.DEPARTMENT_ID);
+```
+
+
+
+3개 테이블을 JOIN할 수 있음
+
+```SQL
+SELECT EMPLOYEE_ID, CITY, DEPARTMENT_NAME
+FROM EMPLOYEES E
+JOIN DEPARTMENT D
+ON D.DEPARTMENT_ID = E.DEPARTMENT_ID
+JOIN LOCATIONS L
+ON D.LOCATION_ID = L.LOCATION_ID;
+```
+
+E와 D 먼저 JOIN => E, D와 L 순차적으로 JOIN
+
+
+
+다른 조건을 또 부여할 수 있음 - AND, WHERE 조건 등(AND과 WHERE 조건 모두 결과는 동일하게 나옴)
+
+```SQL
+SELECT E.EMPLOYEE_ID, E.LAST_NAME, E.DEPARTMENT_ID, D.DEPARTMENT_ID, D.LOCATION_ID
+FROM EMPLOYEES E
+JOIN DEPARTMENTS D
+ON (E.DEPARTMENT_ID = D.DEPARTMENT_ID)
+WHERE E.MANAGER_ID = 149;
+```
+
+
+
+### SELF JOIN
+
+* ON 절을 사용한 SELF JOINS
+
+  ```SQL
+  SELECT WORKER.LAST_NAME EMP, MANAGER.LAST_NAME MGR
+  FROM EMPLOYEES WORKER JOIN EMPLOYEES MANAGER
+  ON (WORKER.MANAGER_ID = MANAGER.EMPLOYEE_ID);
+  ```
+
+  괄호는 사용하고 싶으면 사용해도 되고, 생략도 가능!
+
+
+
+### NONEQUIJOINS
+
+두 개의 테이블 간에 칼럼 값들이 서로 정확하게 일치하지 않는 경우에 사용
+
+```SQL
+SELECT E.LAST_NAME, E.SALARY, J.GRADE_LEVEL
+FROM EMPLOYEES E
+JOIN JOB_GRADES J
+ON E.SALARY BETWEEN J.LOWEST_SAL AND J.HIGHEST_SAL;
+```
+
+J 테이블의 LOWEST_SAL, HIGHEST_SAL 사이에 있는 값들을 기준으로 병합
+
+
+
+### OUTER JOIN
+
+* INNER JOINS VS OUTER JOINS
+  * INNER JOINS
+    * 두 테이블 간에 맞는 행만을 반환하는 것
+  * OUTER JOINS
+    * INNER JOINS의 결과도 반환하면서 왼쪽 (OR 오른쪽) 테이블에서 MATCH되지 않은 행을 반환하는 것이 왼(오) OUTER JOIN이라고함
+    * 왼쪽 오른쪽 모든 테이블의 값을 반환하는 것이 FULL OUTER JOIN 
+
+
+
+* LEFT OUTER JOIN
+
+  ```SQL
+  SELECT E.LAST_NAME, E.DEPARTMENT_ID, D.DEPARTMENT_NAME
+  FROM EMPLOYEES E
+  LEFT OUTER JOIN DEPARMTMENTS D
+  ON (E.DERPARTMENT_ID = D.DEPARTMENT_ID);
+  ```
+
+  LEFT TABLE이 EMPLOYEES인데 EMPLOYEES 테이블에 있는 모든 행이 나옴!
+
+  DEPARTMENTS 테이블에 맞지 않더라도!
+
+
+
+* RIGHT OUTER JOIN
+
+  ```SQL
+  SEELECT E.LAST_NAME, D.DEPARTMENT_ID, D.DEPARTMENT_NAME
+  FROM EMPLOYEES E
+  RIGTH OUTER JOIN DEPARTMENTS D
+  ON (E.DEPARTMENT_ID = D.DEPARTMENT_ID);
+  ```
+
+  오른쪽 테이블인 DEPARTMENTS 테이블의 모든 행이 다 나옴
+
+
+
+* FULL OUTER JOIN
+
+  ```SQL
+  SELECT E.LAST_NAME, D.DEPARTMENT_ID, D.DEPARTMENT_NAME
+  FROM EMPLOYEES E
+  FULL OUTER JOIN DEPARTMENTS D
+  ON (E.DEPARTMENT_ID = D.DEPARTMENT_ID);
+  ```
+
+  서로 각자의 테이블이 매치되는 행이 없더라도 EMPLOYEES, DEPARTMENTS의 모든 행이 다 나옴!
+
+
+
+### CARTESIAN PRODUCT(카티션곱)
+
+CROSS JOIN = CARTESIAN PRODUCT
+
+
+
+조인 조건절을 적지 않는 경우 해당 테이블에 대한 모든 데이터를 가져오는 현상
+
+즉, 조인 쿼리 중에 WHERE 절 혹은 JOIN 조건절이 잘못 기술되었거나 아예 없을 때 발생/ WHERE 절에 조인 조건을 주지 않을 수도 있음!
+
+=> 두 테이블 간의 관계에서의 모든 경우의 수를 합쳐 테이블로 출력!
+
+
+
+* 카티션 곱 후의 튜플(행)의 수 = 각 테이블의 곱
+* 카티션 곱 후의 속성(컬럼)의 수 = 각 테이블의 속성들을 더한 것
+
+```SQL
+SELECT LAST_NAME, DEPARTMENT_NAME
+FROM EMPLOYEES
+CROSS JOIN DEPARTMENTS;
+```
+
+
+
+## CHAPTER 8. USING SUBQUERIES TO SOLVE QUERIES
+
+### SUBQUERY: TYPES, SYNTAX, AND GUIDELINES
+
+A의 월급보다 더 월급을 많이 받는 사람은 누구냐 는 것에 대해 찾아볼 때 
+
+1. A의 월급을 찾아봐야하고
+2. 그보다 많은 월급을 받는 사람을 찾는 것!
+
+다른 쿼리 안에 한 쿼리를 위치시켜야 하므로!
+
+
+
+서브 쿼리(이너 쿼리)는 메인 쿼리(아우터 쿼리) 이후에 실행
+
+서브쿼리의 결과는 메인 쿼리에 의해 사용됨
+
+
+
+* 서브 쿼리가 사용될 수 있는 곳
+  *  WHERE절
+  * HAVING 절
+  * FROM 절
+
+
+
+```SQL
+SELECT LAST_NAME, SALARY
+FROM EMPLOYEES
+WHERE SALARY > (SELECT SALARY FROM EMPLOYEES WHERE LAST_NAME = 'A');
+```
+
+
+
+* 서브 쿼리 사용 방법
+  *  서브 쿼리를 괄호로 감싸야함
+  * 가독성을 위해 비교 조건 오른쪽에 서브 쿼리를 두어야함
+  * 단일 행 서브쿼리에는 단일 행 연산자를 사용할 수 있고 멀티 행 서브쿼리에는 멀티 행 연산자 사용 가능
+
+
+
+### SINGLE-ROW SUBQUERIES
+
+* 한 행만 반환함
+
+  * = > >= < <= <> 의 단일 행 비교 연산자 사용
+
+  ```SQL
+  SELECT LAST_NAME, JOB_ID, SALARY
+  FROM EMPLOYEES
+  WHERE JOB_ID = (SELECT JOB_ID FROM EMPLOYEES WHERE LAST_NAME='TAYLOR')
+  AND SALARY > (SELECT SALARY FROM EMPLOYEES WHERE LAST_NAME='TAYLOR');
+  ```
+
+  
+
+* 그룹 함수도 사용 가능
+
+  ```SQL
+  SELECT LAST_NAME, JOB_ID, SALARY
+  FROM EMPLOYEES
+  WHERE SALARY = (SELECT MIN(SALARY) FROM EMPLOYEES);
+  ```
+
+  
+
+* 서브쿼리에 HAVING 절 쓰기
+
+  ```SQL
+  SELECT DEPARTMENT_ID, MIN(SALARY)
+  FROM EMPLOYEES
+  GROUP BY DEPARTMENT_ID
+  HAVING MIN(SALARY) > (SELECT MIN(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID = 50) ;
+  ```
+
+   
+
+* 주의할 점!
+
+  * 서브쿼리가 단일인지 멀티 행인지 알아보고 그 타입에 따라 연산자를 사용하는 것이 중요!
+
+    ```SQL
+    SELECT EMPLOYEE_ID, LAST_NAME
+    FROM EMPLOYEES
+    WHERE SALARY = (SELECT MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+    ```
+
+    이 때 잘 썼다고 생각했는데 서브쿼리에 의해서 두 행 이상이 출력된다면 한 행 연산자인 = 이 성립되지 않아 에러가 뜸!
+
+  * INNER 쿼리에 의해 행이 반환되지 않을수도 있음
+
+
+
+### MULTIPLE-ROW SUBQUERIES
+
+한 개 이상의 행을 반환함
+
+이 때는 multiple-row 비교 연산자를 사용 : in, all, any
+
+```SQL
+SELECT LAST_NAME, SALARY, DEPARMENT_ID
+FROM EMPLOYEES
+WHERE SALARY IN (SELECT MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+```
+
+
+
+### USING THE EXISTS OPERATOR
+
+```SQL
+SELECT EMPLOYEE_ID, SALARY, LAST_NAME
+FROM EMPLOYEES M
+WHERE EXISTS (SELECT EMPLOYEE_ID FROM EMPLOYEES W WHERE (조건));
+```
+
+ MULTIPLE 행 서브쿼리에 많은 값이 반환된다면 EXIST 사용가능
+
+
+
+### NULL VALUES IN A SUBQUERY
+
+**주의사항**
+
+NULL과 비교하는 것은 항상 NULL만 나옴!
+
+그래서 NULL 값이 있는 서브쿼리에서 NOT  IN을 쓰면 NULL 값이 나와서 아무 값도 나오지 않음
+
+```SQL
+SELECT LAST_NAME
+FROM EMPLOYEE
+WHERE EMPLOYEE_ID
+NOT IN (SELECT MANAGER_ID FROM EMPLOYEES WHERE MANAGER_ID IS NOT NULL);
+```
+
